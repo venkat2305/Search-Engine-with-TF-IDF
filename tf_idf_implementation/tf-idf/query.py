@@ -1,8 +1,10 @@
+import math
+
 def load_vocab():
     vocab = {}
-    with open('tf_idf_implementation/tf-idf/vocab.txt', 'r') as f:
+    with open('./vocab.txt', 'r') as f:
         vocab_terms = f.readlines()
-    with open('tf_idf_implementation/tf-idf/idf-values.txt', 'r') as f:
+    with open('./idf-values.txt', 'r') as f:
         idf_values = f.readlines()
     for (term,idf_value) in zip(vocab_terms, idf_values):
         vocab[term.strip()] = int(idf_value.strip())
@@ -17,7 +19,7 @@ def load_vocab():
 
 def load_documents():
     documents = []
-    with open('tf_idf_implementation/tf-idf/documents.txt', 'r') as f:
+    with open('./documents.txt', 'r') as f:
         documents = f.readlines()
     documents = [document.strip().split() for document in documents]
     # print('number of documents: ', len(documents))
@@ -25,7 +27,7 @@ def load_documents():
 
 def load_inverted_index():
     inverted_index = {}
-    with open('tf_idf_implementation/tf-idf/inverted-index.txt', 'r') as f:
+    with open('./inverted-index.txt', 'r') as f:
         inverted_index_terms = f.readlines() # readlines() : returns a list containing each line in the file as a list item
         # print(inverted_index_terms)
         for row_num in range(0,len(inverted_index_terms),2):
@@ -55,7 +57,7 @@ def get_tf_dictionary(term): # The get_tf_dictionary(term) function returns a di
     return tf_values
 
 def get_idf_value(term):
-    return vocab_idf_values[term]
+    return math.log(len(documents)/vocab_idf_values[term])
 
 def calculate_sorted_order_of_documents(query_terms):
     potential_documents = {} # The potential_documents dictionary aims to collect the potential documents that are relevant to the given query terms and assign a score to each document based on their TF-IDF values.
@@ -69,12 +71,16 @@ def calculate_sorted_order_of_documents(query_terms):
             if document not in potential_documents:
                 potential_documents[document] = tf_values_by_document[document] * idf_value
             potential_documents[document] += tf_values_by_document[document] * idf_value
+
     # divide the length of the query terms
     print(potential_documents)
     for document in potential_documents:
         potential_documents[document] /= len(query_terms)
+
     potential_documents = dict(sorted(potential_documents.items(), key=lambda item: item[1], reverse=True))
-    return potential_documents
+    
+    for document_index in potential_documents:
+        print('Document: ', documents[int(document_index)], ' Score: ', potential_documents[document_index])    
 
 
 
@@ -82,4 +88,4 @@ query_string = input('Enter your query: ')
 query_terms = query_string.lower().strip().split()[1:]
 
 print(query_terms)
-print(calculate_sorted_order_of_documents(query_terms))
+calculate_sorted_order_of_documents(query_terms)
