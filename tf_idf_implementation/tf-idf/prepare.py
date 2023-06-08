@@ -1,6 +1,6 @@
 # read index.txt and and prepare documents , vocab , idf 
 
-with open('Qdata/index.txt','r') as f:
+with open('tf_idf_implementation/Qdata/index.txt','r') as f:
     lines = f.readlines()
     # print(lines[1])
 
@@ -33,7 +33,7 @@ for index, line in enumerate(lines):
     # preprocess line in lines and add them to documents
     tokens = preprocess(line)
     documents.append(tokens)
-    tokens = set(tokens)
+    tokens = set(tokens) # while calculating idf , we need to know the number of documents in which a term is present , so we use set to remove duplicates
     for token in tokens: # tokens is a document and token is a term in the doucment
         if token not in vocab:
             vocab[token] = 1
@@ -52,12 +52,12 @@ for index, line in enumerate(lines):
 vocab = dict(sorted(vocab.items(), key=lambda item: item[1], reverse=True)) #?
 
 # save the vocab in a text file
-with open('tf-idf/vocab.txt','w') as f:
+with open('tf_idf_implementation/tf-idf/vocab.txt', 'w') as f:
     for token in vocab:
         f.write(token+'\n')
 
 #save the idf-values in a text file
-with open('tf-idf/idf-values.txt','w' ) as f:
+with open('tf_idf_implementation/tf-idf/idf-values.txt','w' ) as f:
     for token in vocab:
         f.write(str(vocab[token])+'\n')
 
@@ -70,7 +70,7 @@ with open('tf-idf/idf-values.txt','w' ) as f:
 # separated by the delimiter string.
 
 # save the documents in a text file
-with open('tf-idf/documents.txt','w') as f:
+with open('tf_idf_implementation/tf-idf/documents.txt','w') as f:
     for doc in documents:
         f.write(' '.join(doc)+'\n')
 
@@ -83,7 +83,7 @@ for index, document in enumerate(documents):
             inverted_index[token].append(index)
 
 # save the inverted index in a text file
-with open('tf-idf/inverted-index.txt', 'w') as f:
+with open('tf_idf_implementation/tf-idf/inverted-index.txt', 'w') as f:
     for key in inverted_index.keys():
         f.write("%s\n" % key)
         f.write("%s\n" % ' '.join([str(doc_id) for doc_id in inverted_index[key]]))
