@@ -1,4 +1,3 @@
-
 def load_vocab():
     vocab = {}
     with open('tf_idf_implementation/tf-idf/vocab.txt', 'r') as f:
@@ -65,15 +64,17 @@ def calculate_sorted_order_of_documents(query_terms):
             continue
         tf_values_by_document = get_tf_dictionary(term)
         idf_value = get_idf_value(term)
+        print(term,tf_values_by_document,idf_value)
         for document in tf_values_by_document:
             if document not in potential_documents:
                 potential_documents[document] = tf_values_by_document[document] * idf_value
             potential_documents[document] += tf_values_by_document[document] * idf_value
     # divide the length of the query terms
+    print(potential_documents)
     for document in potential_documents:
         potential_documents[document] /= len(query_terms)
     potential_documents = dict(sorted(potential_documents.items(), key=lambda item: item[1], reverse=True))
-    print(potential_documents)
+    return potential_documents
 
 
 
