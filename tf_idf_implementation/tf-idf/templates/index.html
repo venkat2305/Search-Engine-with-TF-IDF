@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>search page</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="form">
+      <form method="POST">
+        {{ form.hidden_tag() }} {{ form.search.label }} {{ form.search() }} {{
+        form.submit() }}
+      </form>
+    </div>
+    <div>
+      {% for result in results %}
+      <a href="{{ result['Question Link'] }}">{{ result['Question Link'] }}</a>
+      <p>Score: {{ result['Score'] }}</p>
+      {% endfor %}
+    </div>
+  </body>
+</html>

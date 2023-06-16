@@ -1,4 +1,10 @@
+from flask import Flask, jsonify
 import math
+import re
+
+from flask import Flask, render_template, request, jsonify
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
 
 def load_vocab():
     vocab = {}
@@ -72,7 +78,7 @@ def get_idf_value(term):
 
 def calculate_sorted_order_of_documents(query_terms):
     potential_documents = {} # The potential_documents dictionary aims to collect the potential documents that are relevant to the given query terms and assign a score to each document based on their TF-IDF values.
-    
+    ans = [] # to store the list of question links
     for term in query_terms:
         if term in vocab_idf_values:
             tf_values_by_document = get_tf_dictionary(term)
@@ -80,7 +86,6 @@ def calculate_sorted_order_of_documents(query_terms):
         else:
             continue
 
-        
         # print(term,tf_values_by_document,idf_value)
 
         # calculation of tf-idf scores and storing the {document + score(avg of tf-idf)} in potential_documents
@@ -99,28 +104,53 @@ def calculate_sorted_order_of_documents(query_terms):
     #sorting the potential_documents by the score of the documents
     potential_documents = dict(sorted(potential_documents.items(), key=lambda item: item[1], reverse=True))
     
+    if(len(potential_documents) == 0):
+        print("No matching question found. Please search with more relevant terms.")
+
     # for document_index in potential_documents:
     #     print('Document: ', documents[int(document_index)], ' Score: ', potential_documents[document_index])
 
-    return potential_documents  
+    for doc_index in potential_documents:
+        ans.append(question_links[int(doc_index)])
+    
+    return ans
+
+      
 
 # print("Numbet of documents: ", len(documents))
 
-query_string = input('Enter your query: ')
-query_terms = query_string.lower().strip().split()[1:]
+# query_string = input('Enter your query: ')
+# query_terms = query_string.lower().strip().split()[1:]
 
-# print(query_terms)
-potential_documents = calculate_sorted_order_of_documents(query_terms)
+# # print(query_terms)
+# potential_documents = calculate_sorted_order_of_documents(query_terms)
+# for doc in potential_documents:
+#     print(doc)
 
-# print(question_links)
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your-secret-key'
 
-# print the top 15 documents related to query terms along with their scores and question link
-for document_index in list(potential_documents.keys())[:15]:  # Iterate over the top 15 documents
-    print('Question:', question_links[int(document_index)] , 'Score:', potential_documents[document_index] )
+class SearchForm(FlaskForm):
+    search = StringField('Enter your search term')
+    submit = SubmitField('Search')
 
+@app.route("/<query>")
+def return_links(query):
+    q_terms = [term.lower() for term in query.strip().split()]
+    return jsonify(calculate_sorted_order_of_documents(q_terms)[:20:])
 
+@app.route("/", methods=['GET', 'POST'])
+def home():
+    form = SearchForm()
+    results = []
+    if form.validate_on_submit():
+        query = form.search.data
+        q_terms = [term.lower() for term in query.strip().split()]
+        results = calculate_sorted_order_of_documents(q_terms)[:20]
+    return render_template('index.html', form=form, results=results)
 
-
+if __name__ == '__main__':
+    app.run()
 
 
 
