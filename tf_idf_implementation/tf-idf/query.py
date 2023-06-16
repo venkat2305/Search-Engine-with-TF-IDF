@@ -74,10 +74,13 @@ def calculate_sorted_order_of_documents(query_terms):
     potential_documents = {} # The potential_documents dictionary aims to collect the potential documents that are relevant to the given query terms and assign a score to each document based on their TF-IDF values.
     
     for term in query_terms:
-        if vocab_idf_values[term] == 0:
+        if term in vocab_idf_values:
+            tf_values_by_document = get_tf_dictionary(term)
+            idf_value = get_idf_value(term)
+        else:
             continue
-        tf_values_by_document = get_tf_dictionary(term)
-        idf_value = get_idf_value(term)
+
+        
         # print(term,tf_values_by_document,idf_value)
 
         # calculation of tf-idf scores and storing the {document + score(avg of tf-idf)} in potential_documents
