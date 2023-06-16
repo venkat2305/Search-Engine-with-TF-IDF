@@ -39,6 +39,7 @@ for index, line in enumerate(lines):
             vocab[token] = 1
         else:
             vocab[token] += 1
+        
 
 # print("number of documents:",len(documents))
 # print("size of vocab:",len(vocab))
@@ -78,7 +79,7 @@ inverted_index = {}
 for index, document in enumerate(documents):
     for token in document:
         if token not in inverted_index:
-            inverted_index[token] = [index]
+            inverted_index[token] = [index] # index is document id
         else:
             inverted_index[token].append(index)
 
