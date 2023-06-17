@@ -141,13 +141,16 @@ def return_links(query):
 def home():
     form = SearchForm()
     results = []
+    performed_search = False
     if form.validate_on_submit():
         query = form.search.data
         q_terms = [term.lower() for term in query.strip().split()]
         results = calculate_sorted_order_of_documents(q_terms)[:20:]
-    return render_template('index.html', form=form, results=results)
+        performed_search = True
+    return render_template('index.html', form=form, results=results, performed_search=performed_search)
 
-
+if __name__ == '__main__':
+    app.run()
 
 
 

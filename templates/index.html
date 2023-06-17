@@ -9,23 +9,23 @@
   <body>
     <div class="form">
       <form method="POST">
-        {{ form.hidden_tag() }} {{ form.search.label }} {{ form.search() }} {{
-        form.submit() }}
+        {{ form.hidden_tag() }} {{ form.search.label }} {{ form.search() }} {{ form.submit() }}
       </form>
     </div>
     <div>
-      <h1>Search Results</h1>
-      {% if results %}
-      <ol>
-        {% for result in results %}
-        <li>
-          <a href="{{result}}"  target="_blank"">{{result}}</a>
-          
-        </li>
-        {% endfor %}
-      </ol>
-      {% else %}
-      <p>No results found.</p>
+      {% if performed_search %}
+        {% if results %}
+          <h1>Search Results</h1>
+          <ol>
+            {% for result in results %}
+              <li>
+                <a href="{{ result }}" target="_blank">{{ result }}</a>
+              </li>
+            {% endfor %}
+          </ol>
+        {% else %}
+          <h1>No results found.</h1>
+        {% endif %}
       {% endif %}
     </div>
   </body>
