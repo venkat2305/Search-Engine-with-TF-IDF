@@ -8,16 +8,16 @@ from wtforms import StringField, SubmitField
 
 def load_vocab():
     vocab = {}
-    with open('./vocab.txt', 'r', encoding='latin1') as f:
+    with open('./vocab.txt', 'r', encoding='latin-1') as f:
         vocab_terms = f.readlines()
-    with open('./idf-values.txt', 'r', encoding='latin1') as f:
+    with open('./idf-values.txt', 'r', encoding='latin-1') as f:
         idf_values = f.readlines()
     for (term,idf_value) in zip(vocab_terms, idf_values):
         vocab[term.strip()] = int(idf_value.strip())
     return vocab
 
 def question_links():
-    with open('Qdata/Qindex.txt', 'r', encoding='latin1') as f:
+    with open('Qdata/Qindex.txt', 'r', encoding='latin-1') as f:
         question_links = f.readlines()
         question_links = [link.strip() for link in question_links]
     return question_links
