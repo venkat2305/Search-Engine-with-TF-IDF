@@ -31,7 +31,7 @@ def question_links():
 
 def load_documents():
     documents = []
-    with open('./documents.txt', 'r') as f:
+    with open('./documents.txt', 'r' , encoding='latin-1') as f:
         documents = f.readlines()
     documents = [document.strip().split() for document in documents]
     # print('number of documents: ', len(documents))
@@ -39,7 +39,7 @@ def load_documents():
 
 def load_inverted_index():
     inverted_index = {}
-    with open('./inverted-index.txt', 'r') as f:
+    with open('./inverted-index.txt', 'r', encoding='latin-1') as f:
         inverted_index_terms = f.readlines() # readlines() : returns a list containing each line in the file as a list item
         # print(inverted_index_terms)
         for row_num in range(0,len(inverted_index_terms),2):
