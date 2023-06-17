@@ -127,7 +127,7 @@ def calculate_sorted_order_of_documents(query_terms):
 # for doc in potential_documents:
 #     print(doc)
 
-app = Flask(_name_) 
+app = Flask(__name__) 
 app.config['SECRET_KEY'] = 'your-secret-key'
 
 class SearchForm(FlaskForm):
@@ -146,11 +146,10 @@ def home():
     if form.validate_on_submit():
         query = form.search.data
         q_terms = [term.lower() for term in query.strip().split()]
-        results = calculate_sorted_order_of_documents(q_terms)[:20]
+        results = calculate_sorted_order_of_documents(q_terms)[:20:]
     return render_template('index.html', form=form, results=results)
 
-if _name_ == "_main_":
-    app.run(debug=True)
+
 
 
 

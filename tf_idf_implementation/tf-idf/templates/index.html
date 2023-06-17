@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>search page</title>
+    <title>Search Page</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -14,10 +14,19 @@
       </form>
     </div>
     <div>
-      {% for result in results %}
-      <a href="{{ result['Question Link'] }}">{{ result['Question Link'] }}</a>
-      <p>Score: {{ result['Score'] }}</p>
-      {% endfor %}
+      <h1>Search Results</h1>
+      {% if results %}
+      <ol>
+        {% for result in results %}
+        <li>
+          <a href="{{result}}"  target="_blank"">{{result}}</a>
+          
+        </li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p>No results found.</p>
+      {% endif %}
     </div>
   </body>
 </html>
