@@ -19,7 +19,7 @@ def load_vocab():
     return vocab
 
 def question_links():
-    with open('../Qdata/Qindex.txt', 'r') as f:
+    with open('Qdata/Qindex.txt', 'r') as f:
         question_links = f.readlines()
         question_links = [link.strip() for link in question_links]  # Use 'link.strip()' instead of 'question_links.strip'
     return question_links
